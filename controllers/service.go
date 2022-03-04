@@ -38,7 +38,7 @@ func (r *PrometheusMSTeamsBridgeReconciler) ensureService(request reconcile.Requ
 func (r *PrometheusMSTeamsBridgeReconciler) createService(v *bridgev1alpha1.PrometheusMSTeamsBridge) *corev1.Service {
 	service := &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "backend-service",
+			Name:      "bridge-service",
 			Namespace: v.Namespace,
 		},
 		Spec: corev1.ServiceSpec{
