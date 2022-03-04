@@ -1,0 +1,24 @@
+# permissions for end users to edit prometheusmsteamsbridges.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheusmsteamsbridge-editor-role
+rules:
+- apiGroups:
+  - bridge.shibumi.dev
+  resources:
+  - prometheusmsteamsbridges
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - bridge.shibumi.dev
+  resources:
+  - prometheusmsteamsbridges/status
+  verbs:
+  - get

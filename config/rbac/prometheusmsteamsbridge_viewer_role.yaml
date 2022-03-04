@@ -1,0 +1,20 @@
+# permissions for end users to view prometheusmsteamsbridges.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheusmsteamsbridge-viewer-role
+rules:
+- apiGroups:
+  - bridge.shibumi.dev
+  resources:
+  - prometheusmsteamsbridges
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - bridge.shibumi.dev
+  resources:
+  - prometheusmsteamsbridges/status
+  verbs:
+  - get

@@ -1,0 +1,7 @@
+apiVersion: bridge.shibumi.dev/v1alpha1
+kind: PrometheusMSTeamsBridge
+metadata:
+  name: prometheusmsteamsbridge-sample
+spec:
+ replicas: 1
+ image: quay.io/prometheusmsteams/prometheus-msteams:v1.5.0
