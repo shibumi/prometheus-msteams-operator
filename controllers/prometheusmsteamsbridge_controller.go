@@ -74,6 +74,12 @@ func (r *PrometheusMSTeamsBridgeReconciler) Reconcile(ctx context.Context, req c
 		return *result, err
 	}
 
+	result, err = r.ensureService(req, instance, r.createService(instance))
+	if result != nil {
+		log.Error(err, "Service not ready")
+		return *result, err
+	}
+
 	log.Info("Skip reconcile: Deployment already exist",
 		"Deployment.Namespace", found.Namespace, "Deployment.Name", found.Name)
 	return ctrl.Result{}, nil
