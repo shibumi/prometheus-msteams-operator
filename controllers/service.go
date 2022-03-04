@@ -13,6 +13,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 )
 
+// ensureService ensures that a service has been created for our CR
 func (r *PrometheusMSTeamsBridgeReconciler) ensureService(request reconcile.Request, instance *bridgev1alpha1.PrometheusMSTeamsBridge, service *corev1.Service) (*reconcile.Result, error) {
 
 	found := &corev1.Service{}
@@ -35,6 +36,7 @@ func (r *PrometheusMSTeamsBridgeReconciler) ensureService(request reconcile.Requ
 	return nil, nil
 }
 
+// createService creates the necessary service for the deployment
 func (r *PrometheusMSTeamsBridgeReconciler) createService(v *bridgev1alpha1.PrometheusMSTeamsBridge) *corev1.Service {
 	service := &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
