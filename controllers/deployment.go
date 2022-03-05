@@ -21,6 +21,7 @@ func (r *PrometheusMSTeamsBridgeReconciler) ensureDeployment(request reconcile.R
 		Namespace: instance.Namespace,
 	}, found)
 	if err != nil && errors.IsNotFound(err) {
+		//if deployment could not get found, create the deployment on the cluster
 		err = r.Create(context.Background(), deploy)
 		if err != nil {
 			return &reconcile.Result{}, nil

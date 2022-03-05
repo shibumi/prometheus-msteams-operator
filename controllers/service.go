@@ -15,12 +15,12 @@ import (
 
 // ensureService ensures that a service has been created for our CR
 func (r *PrometheusMSTeamsBridgeReconciler) ensureService(request reconcile.Request, instance *bridgev1alpha1.PrometheusMSTeamsBridge, service *corev1.Service) (*reconcile.Result, error) {
-
 	found := &corev1.Service{}
 	err := r.Get(context.Background(), types.NamespacedName{
 		Name:      service.Name,
 		Namespace: instance.Namespace,
 	}, found)
+
 	if err != nil && errors.IsNotFound(err) {
 		err = r.Create(context.Background(), service)
 

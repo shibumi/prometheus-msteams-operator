@@ -44,18 +44,11 @@ type PrometheusMSTeamsBridgeReconciler struct {
 //+kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=core,resources=pods,verbs=get;list;
 
-// Reconcile is part of the main kubernetes reconciliation loop which aims to
-// move the current state of the cluster closer to the desired state.
-// TODO(user): Modify the Reconcile function to compare the state specified by
-// the PrometheusMSTeamsBridge object against the actual cluster state, and then
-// perform operations to make the cluster state reflect the state specified by
-// the user.
-//
-// For more details, check Reconcile and its Result here:
-// - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.11.0/pkg/reconcile
+// Reconcile waits for a PrometheusMSTeamsBridge CR and creates the necessary resources for this CR
 func (r *PrometheusMSTeamsBridgeReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	log := log.FromContext(ctx).WithValues("Bridge", req.Namespace)
+	l := log.FromContext(ctx).WithValues("Bridge", req.Namespace)
 
+	// lookup deployed PrometheusMSTeamsBridge CR
 	instance := &bridgev1alpha1.PrometheusMSTeamsBridge{}
 	err := r.Get(context.Background(), req.NamespacedName, instance)
 	if err != nil {
@@ -66,21 +59,23 @@ func (r *PrometheusMSTeamsBridgeReconciler) Reconcile(ctx context.Context, req c
 	}
 
 	found := &appsv1.Deployment{}
+	// try to look up the deployment
 	err = r.Get(context.Background(), types.NamespacedName{Name: instance.Name, Namespace: instance.Namespace}, found)
 	var result *reconcile.Result
+	// ensure Deployment exists.. if not create it
 	result, err = r.ensureDeployment(req, instance, r.createDeployment(instance))
 	if result != nil {
-		log.Error(err, "Deployment not ready")
+		l.Error(err, "Deployment not ready")
 		return *result, err
 	}
 
 	result, err = r.ensureService(req, instance, r.createService(instance))
 	if result != nil {
-		log.Error(err, "Service not ready")
+		l.Error(err, "Service not ready")
 		return *result, err
 	}
 
-	log.Info("Skip reconcile: Deployment already exist",
+	l.Info("Skip reconcile: Deployment already exist",
 		"Deployment.Namespace", found.Namespace, "Deployment.Name", found.Name)
 	return ctrl.Result{}, nil
 }
